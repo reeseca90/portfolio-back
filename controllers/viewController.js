@@ -61,7 +61,7 @@ exports.comment = [
     else {
       comment.save(function(err) {
         if (err) { return next(err); }
-        res.redirect(post.viewUrl);
+        res.end();
       })
     }
   }

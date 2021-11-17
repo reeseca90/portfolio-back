@@ -1,6 +1,7 @@
 
 exports.resume = (req, res) => {
-  res.download('./public/ReeseResume.pdf');
+  const file = `${__dirname}/ReeseResume.pdf`;
+  res.download(file);
 }
 
 /* 

@@ -14,11 +14,11 @@ const PostSchema = new Schema(
 // virtuals
 
 PostSchema.virtual('createUrl').get(function() {
-  return '/blog/create/posts/' + this._id;
+  return '/api/blog/create/posts/' + this._id;
 });
 
 PostSchema.virtual('viewUrl').get(function() {
-  return '/blog/view/posts/' + this._id;
+  return '/api/blog/view/posts/' + this._id;
 });
 
 module.exports = mongoose.model('Post', PostSchema);

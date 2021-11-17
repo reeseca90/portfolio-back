@@ -55,6 +55,27 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req, res, next) {
+  if (req.headers.hasOwnProperty('x-forwarded-for')) {
+    req.redirUrl = req.headers['x-forwarded-proto']
+    + "://"
+    + req.headers.host    // proxy
+    // plus any proxy subdirs if needed 
+    + "/"
+    + proxy_subdir
+    ;
+  } else {
+    // direct requeset
+    req.redirUrl = req.protocol
+       + "://"
+       + req.headers.host
+    ;
+ }
+ next();
+});
+
+
+
 app.use('/', indexRouter);
 app.use('/blog/', blogRouter);
 app.use('/blog/create', passport.authenticate('jwt', { session: false }), createRouter);

@@ -64,6 +64,6 @@ exports.login_post = async (req, res, next) => {
 // logout
 exports.logout = (req, res) => {
   req.logout();
-  res.redirect("/blog/view/posts");
+  res.end();
 }
 
