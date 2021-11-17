@@ -27,7 +27,7 @@ exports.newpost_submit = function(req, res, next) {
       published: req.body.published
     }).save(function(err) {
       if (err) { return next(err); }
-      res.redirect('/create/posts');
+      res.redirect('/blog/create/posts/');
     })
   }
 
@@ -79,7 +79,7 @@ exports.commentAction = async function(req, res, next) {
 function delete_comment(req, res, next) {
   Comment.findByIdAndDelete(req.body.commentID, function (err) {
     if (err) { return next(err); }
-    res.redirect('/create/posts/' + req.params.id);
+    res.redirect('/blog/create/posts/' + req.params.id);
   })
 }
 
@@ -104,11 +104,9 @@ exports.editAction = function(req, res, next) {
         _id: req.body._id
       });
 
-    console.log('new post: ' + post)
-      
     Post.findByIdAndUpdate(req.body._id, post, {}, function(err) {
         if (err) { return next(err); }
-        res.redirect('/create/posts');
+        res.redirect(post.createUrl);
     });
   }
 }
@@ -121,6 +119,6 @@ function delete_post(req, res, next) {
   })
   Post.findByIdAndDelete(req.body.deletePostID, function (err) {
     if (err) { return next(err); }
-    res.redirect('/create/posts/');
+    res.redirect('/blog/create/posts/');
   })
 }
