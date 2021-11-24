@@ -7,7 +7,9 @@ const PostSchema = new Schema(
     createDate: { type: Date },
     title: { type: String, required: true },
     content: { type: String, required: true },
-    published: { type: Boolean } 
+    published: { type: Boolean },
+    thumb: { type: Object },
+    image: { type: Object}
   }
 );
 

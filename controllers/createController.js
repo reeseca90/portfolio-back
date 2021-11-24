@@ -24,7 +24,9 @@ exports.newpost_submit = function(req, res, next) {
       createDate: Date.now(),
       title: req.body.title,
       content: req.body.content,
-      published: req.body.published
+      published: req.body.published,
+      thumb: req.body.thumb,
+      image: req.body.image
     }).save(function(err) {
       if (err) { return next(err); }
       res.end();
