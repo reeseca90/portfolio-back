@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 const passport = require('passport');
 const session = require("express-session");
+
 const cors = require('cors');
 
 require('dotenv').config();
@@ -55,31 +56,10 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req, res, next) {
-  if (req.headers.hasOwnProperty('x-forwarded-for')) {
-    req.redirUrl = req.headers['x-forwarded-proto']
-    + "://"
-    + req.headers.host    // proxy
-    // plus any proxy subdirs if needed 
-    + "/"
-    + proxy_subdir
-    ;
-  } else {
-    // direct requeset
-    req.redirUrl = req.protocol
-       + "://"
-       + req.headers.host
-    ;
- }
- next();
-});
-
-
-
-app.use('/', indexRouter);
-app.use('/blog/', blogRouter);
-app.use('/blog/create', passport.authenticate('jwt', { session: false }), createRouter);
-app.use('/blog/view', viewRouter);
+app.use('/api', indexRouter);
+app.use('/api/blog/', blogRouter);
+app.use('/api/blog/create', passport.authenticate('jwt', { session: false }), createRouter);
+app.use('/api/blog/view', viewRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -94,7 +74,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.send('error');
+  res.send(err);
 });
 
 module.exports = app;
