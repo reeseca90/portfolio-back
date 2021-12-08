@@ -5,12 +5,18 @@ const Comment = require('../models/comment');
 const async = require('async');
 const mongoose = require('mongoose');
 
-exports.view_all = function(req, res, next) {
+exports.view_all = async function(req, res, next) {
+  // provided from the frontend as a query parameter
+  const pageNum = req.query.pageNum;
+  const postCount = await Post.countDocuments({});
+
   Post.find({})
     .sort({createDate: -1})
+    .skip((pageNum - 1) * 5) // skip records for pagination
+    .limit(5) // limit to five posts per page
     .exec(function(err, posts) {
       if (err) { return next(err); }
-      res.send({ title: 'All Posts', posts: posts, user: req.user });
+      res.send({ title: 'All Posts', count: postCount, posts: posts, user: req.user });
     });
 }
 
