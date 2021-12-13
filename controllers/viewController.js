@@ -23,6 +23,7 @@ exports.view_all = async function(req, res, next) {
     if (err) { return next(err); }
       // open client and cache data for use in route
       await client.connect();
+      client.setEx("pageNum", 300, pageNum);
       client.setEx("posts", 300, JSON.stringify(posts));
       client.quit();
       res.send({ title: 'All Posts', count: postCount, posts: posts });

@@ -13,12 +13,12 @@ client.on('error', err => {
 
 // caching function with redis for view all posts
 async function allPostsCache(req, res, next) { 
-  console.log('caching')
   await client.connect();
 
   const cachePosts = await client.get('posts');
+  const cachePageNum = await client.get('pageNum');
   
-  if (cachePosts) {
+  if (cachePosts && cachePageNum === req.query.pageNum) {
     await client.quit();
     const postCount = await Post.countDocuments({});
     res.send({ title: 'All Posts Cached', count: postCount, posts: JSON.parse(cachePosts) });
