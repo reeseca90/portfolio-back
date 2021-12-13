@@ -3,11 +3,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const cors = require('cors');
 
 const passport = require('passport');
 const session = require("express-session");
-
-const cors = require('cors');
 
 require('dotenv').config();
 
@@ -18,7 +17,6 @@ const createRouter = require('./routes/create');
 
 const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
-
 passport.use(
   new JWTstrategy(
     {

@@ -4,17 +4,27 @@ const Post = require('../models/post');
 const { body, validationResult } = require('express-validator');
 const async = require('async');
 
+const redis = require('redis');
+const client = redis.createClient(6379);
+client.on('error', err => {
+  console.log('Error' + err)
+});
+
 exports.view_all = async function(req, res, next) {
   // provided from the frontend as a query parameter
   const pageNum = req.query.pageNum;
   const postCount = await Post.countDocuments({});
-
+  
   Post.find({})
-    .sort({createDate: -1})
-    .skip((pageNum - 1) * 5) // skip records for pagination
-    .limit(5) // limit to five posts per page
-    .exec(function(err, posts) {
-      if (err) { return next(err); }
+  .sort({createDate: -1})
+  .skip((pageNum - 1) * 5) // skip records for pagination
+  .limit(5) // limit to five posts per page
+  .exec(async function(err, posts) {
+    if (err) { return next(err); }
+      // open client and cache data for use in route
+      await client.connect();
+      client.setEx("posts", 300, JSON.stringify(posts));
+      client.quit();
       res.send({ title: 'All Posts', count: postCount, posts: posts });
     });
 }
